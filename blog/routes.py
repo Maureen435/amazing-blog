@@ -40,8 +40,6 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            # next_page = request.args.get('next')
-            # return redirect(next_page) if next_page else redirect(url_for('home'))
             return redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
@@ -115,11 +113,7 @@ def update_post(post_id):
         form.content.data = post.content
     return render_template('create_blog.html', title='Update Blog',
                         form=form, legend='Update Blog')
-@app.route
-@login_required
-def delete_post(post_id):
-    db.session.delete(post)
-    
+
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
