@@ -5,12 +5,16 @@ from blog.models import User, Post, Comment
 from flask_login import login_user, current_user, logout_user, login_required
 from blog import requests
 
-
+@app.route("/")
+@app.route("/home")
+def home():
+    quote=requests.get_quote()
+    posts = Post.query.all()
+    return render_template('home.html', posts=posts, quote=quote)
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -111,13 +115,15 @@ def update_post(post_id):
         form.content.data = post.content
     return render_template('create_blog.html', title='Update Blog',
                         form=form, legend='Update Blog')
-
+@app.route
+@login_required
+def delete_post(post_id):
+    db.session.delete(post)
+    
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
-    # if post.author != current_user:
-    #     abort(403)
     db.session.delete(post)
     db.session.commit()
     flash('Blog deleted!', 'primary')
@@ -127,8 +133,6 @@ def delete_post(post_id):
 @login_required
 def delete_comment(comment_id):
     comment = Comment.query.get_or_404(post_id)
-    # if post.author != current_user:
-    #     abort(403)
     db.session.delete(comment)
     db.session.commit()
     flash('Comment deleted!', 'primary')
