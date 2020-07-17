@@ -5,12 +5,6 @@ from blog.models import User, Post, Comment
 from flask_login import login_user, current_user, logout_user, login_required
 from blog import requests
 
-@app.route("/")
-@app.route("/home")
-def home():
-    quote=requests.get_quote()
-    posts = Post.query.all()
-    return render_template('home.html', posts=posts, quote=quote)
 
 
 @app.route("/about")
