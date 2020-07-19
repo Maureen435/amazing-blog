@@ -1,3 +1,4 @@
+ 
 from flask import render_template, url_for, flash, redirect, request,abort
 from blog import app, db, bcrypt
 from blog.forms import RegistrationForm, LoginForm, UpdateAccountForm,PostForm,CommentForm
@@ -12,9 +13,11 @@ def home():
     posts = Post.query.all()
     return render_template('home.html', posts=posts, quote=quote)
 
+
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -40,6 +43,8 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
+            # next_page = request.args.get('next')
+            # return redirect(next_page) if next_page else redirect(url_for('home'))
             return redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
@@ -118,6 +123,8 @@ def update_post(post_id):
 @login_required
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
+    # if post.author != current_user:
+    #     abort(403)
     db.session.delete(post)
     db.session.commit()
     flash('Blog deleted!', 'primary')
@@ -127,8 +134,9 @@ def delete_post(post_id):
 @login_required
 def delete_comment(comment_id):
     comment = Comment.query.get_or_404(post_id)
+    # if post.author != current_user:
+    #     abort(403)
     db.session.delete(comment)
     db.session.commit()
     flash('Comment deleted!', 'primary')
     return redirect(url_for('home'))
-
