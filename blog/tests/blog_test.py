@@ -9,7 +9,7 @@ class PostModelTest(unittest.TestCase):
         self.user_Betty = User(
             username="Memzo", password="1234", email="memo@gmail.com")
         self.new_post = Post(
-            title="code", body="coding rocks", user_id=self.user_Betty.id)
+            title="code", body="coding rocks", user_id=self.user_Memzo.id)
 
     def tearDown(self):
         Post.query.delete()
