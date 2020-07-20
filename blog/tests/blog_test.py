@@ -7,7 +7,7 @@ class PostModelTest(unittest.TestCase):
 
     def setUp(self):
         self.user_Betty = User(
-            username="Betty", password="1234", email="betty75@gmail.com")
+            username="Memzo", password="1234", email="memo@gmail.com")
         self.new_post = Post(
             title="code", body="coding rocks", user_id=self.user_Betty.id)
 
